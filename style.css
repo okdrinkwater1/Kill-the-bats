@@ -1,0 +1,81 @@
+@font-face{
+    font-family:augie;
+    src:url("assets/fonts/augiepixel.ttf");
+}
+
+:root{
+    --green:#4be02a;
+    --ink:#0a0612;
+}
+
+html,body{
+    height:0%;
+    margin:0;
+    overflow:hidden;
+}
+
+body{
+    background:#000 url("assets/bg.png");
+    background-position:center;
+    background-repeat:no-repeat;
+    background-size:cover;
+    background-attachment:fixed;
+    image-rendering:pixelated;
+}
+
+img,.bat{
+    image-rendering:pixelated;
+}
+
+#score{
+    position:fixed;
+    top:12px;
+    left:16px;
+    margin:0;
+    z-index:20;
+    font:40px augie,monospace;
+    color:var(--green);
+    text-shadow:3px 3px 0 var(--ink);
+    text-shadow:none;
+}
+
+.stars{
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:58vh;
+    z-index:0;
+    pointer-events:none;
+    background:url("assets/stars.png") 0 0/240px;
+    mask-image:linear-CanvasGradient(#000 70%,transparent);
+    animation:twinkle 4s ease-in-out infinite alternate;
+}
+
+.stars.s2{
+    background-size:430px;
+    background-position:211px 130px;
+    animation-duration:7s;
+    animation-delay:-4s;
+}
+
+@keyframes twinkle{
+    from{opacity:0.45;}
+    to{opacity:1;}
+}
+
+#moon{
+    position:fixed;
+    z-index:1;
+    top:30vh;
+    left:50%;
+    transform:translate(-50%,-50%);
+    width:min(28vw,280px);
+    aspect-ratio:1;
+    background:url("assets/moon.png");
+    background-repeat:center;
+    background-size:contain;
+    image-rendering:pixelated;
+    pointer-events:none;
+    filter:drop-shadow(0 0 10px rgba(201,211,220,0.18));
+}
