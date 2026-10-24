@@ -1,6 +1,6 @@
 @font-face{
     font-family:augie;
-    src:url("assets/fonts/augiepixel.ttf");
+    src:url("font/augiepixel.ttf");
 }
 
 :root{
@@ -9,7 +9,7 @@
 }
 
 html,body{
-    height:0%;
+    height:100%;
     margin:0;
     overflow:hidden;
 }
@@ -33,10 +33,9 @@ img,.bat{
     left:16px;
     margin:0;
     z-index:20;
-    font:40px augie,monospace;
+    font:50px augie,monospace;
     color:var(--green);
     text-shadow:3px 3px 0 var(--ink);
-    text-shadow:none;
 }
 
 .stars{
@@ -45,15 +44,24 @@ img,.bat{
     left:0;
     width:100%;
     height:58vh;
-    z-index:0;
+    z-index:-1;
     pointer-events:none;
-    background:url("assets/stars.png") 0 0/240px;
-    mask-image:linear-CanvasGradient(#000 70%,transparent);
+    background:url("assets/stars.png");
+    background-size:200px;
+    image-rendering:pixelated;
+    mask-image:linear-gradient(#000 70%,transparent);
     animation:twinkle 4s ease-in-out infinite alternate;
 }
 
 .stars.s2{
-    background-size:430px;
+    background-size:300px;
+    background-position:97px 41px;
+    animation-duration:5.5s;
+    animation-delay:-2s;
+}
+
+.stars.s3{
+    background-size:400px;
     background-position:211px 130px;
     animation-duration:7s;
     animation-delay:-4s;
@@ -66,14 +74,14 @@ img,.bat{
 
 #moon{
     position:fixed;
-    z-index:1;
+    z-index:-1;
     top:30vh;
     left:50%;
     transform:translate(-50%,-50%);
     width:min(28vw,280px);
     aspect-ratio:1;
     background:url("assets/moon.png");
-    background-repeat:center;
+    background-repeat:no-repeat;
     background-size:contain;
     image-rendering:pixelated;
     pointer-events:none;
