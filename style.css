@@ -20,6 +20,7 @@ body{
     background-repeat:no-repeat;
     background-size:cover;
     background-attachment:fixed;
+    cursor:url("assets/target.png") 20 20,auto;
     image-rendering:pixelated;
     user-select:none;
     -webkit-user-select:none;
@@ -38,10 +39,26 @@ img,.bat{
     margin:0;
     z-index:20;
     font:50px augie,monospace;
-    color:var(--green);
-    text-shadow:3px 3px 0 var(--ink);
+    background:linear-gradient(#c9ff7a,var(--green)55%,#23921a);
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent;
+    filter:drop-shadow(3px 0px 0 var(--ink)) drop-shadow(-3px 0px 0 var(--ink)) drop-shadow(0px 3px 0 var(--ink)) drop-shadow(0px -3px 0 var(--ink)) drop-shadow(3px 4px 0 #000);
     user-select:none;
     -webkit-user-select:none;
+}
+
+#score::before{
+    content:"SCORE";
+    font-size:26px;
+}
+
+#score.bump{
+    animation:bump 0.2s ease-out;
+}
+
+@keyframes bump{
+    50%{transform:scale(1.25);}
 }
 
 .stars{
@@ -103,10 +120,13 @@ img,.bat{
 
 .pop{
     position:fixed;
-    font-size:34px;
+    font-size:40px;
     font-family:augie;
-    color:#4be02a;
-    text-shadow:2px 2px 0 #0a0612;
+    background:linear-gradient(#c9ff7a,var(--green)55%,#23921a);
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent;
+    filter:drop-shadow(2px 0px 0 var(--ink)) drop-shadow(-2px 0px 0 var(--ink)) drop-shadow(0px 2px 0 var(--ink)) drop-shadow(0px -2px 0 var(--ink)) drop-shadow(2px 3px 0 #000);
     pointer-events:none;
     animation:rise 0.8s ease-out forwards;
 }
@@ -138,29 +158,65 @@ img,.bat{
     justify-content:center;
     gap:14px;
     text-align:center;
-    background:rgba(10,6,18,0.05);
+    background:rgba(10,6,18,0.5);
     font-family:augie;
     color:#4be02a;
     cursor:pointer;
 }
 
-#start img{
-    width:240px;
-    max-width:60vw;
-}
-
 #start h1{
     margin:0;
     font-size:100px;
-    text-shadow:4px 4px 0 #0a0612;
+    letter-spacing:4px;
+    background:linear-gradient(#c9ff7a,var(--green) 55%,#23921a);
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent;
+    filter:drop-shadow(5px 0px 0 var(--ink)) drop-shadow(-5px 0px 0 var(--ink)) drop-shadow(0px 5px 0 var(--ink)) drop-shadow(0px -5px 0 var(--ink)) drop-shadow(6px 8px 0 #000);
+    animation:floatP 2.4s ease-in-out infinite alternate;
 }
 
 #start p{
     margin:0;
     font-size:26px;
+    color:#c9ff7a;
     text-shadow:2px 2px 0 #0a0612;
 }
 
+@keyframes floatP{
+to{transform:translateY(-10px);}
+}
+
+#round{
+    position:fixed;
+    top:40%;
+    left:0;
+    width:100%;
+    margin:0;
+    text-align:center;
+    font-size:84px;
+    font-family:augie;
+    background:linear-gradient(#c9ff7a,var(--green) 55%,#23921a);
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent;
+    filter:drop-shadow(5px 0px 0 var(--ink)) drop-shadow(-5px 0px 0 var(--ink)) drop-shadow(0px 5px 0 var(--ink)) drop-shadow(0px -5px 0 var(--ink)) drop-shadow(6px 8px 0 #000);
+    opacity:0;
+    pointer-events:none;
+}
+
+#round.show{
+    animation:roundBanner 1.6s ease-out;
+}
+
+@keyframes roundBanner{
+    0%{opacity:0;transform:scale(0.6);}
+    15%{opacity:1;transform:scale(1.1);}
+    25%{transform:scale(1);}
+    80%{opacity:1;}
+    100%{opacity:0;}
+}
+
 @media (prefers-reduced-motion:reduce){
-    .stars{animation:none;}
+    .stars,#start h1{animation:none;}
 }

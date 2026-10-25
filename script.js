@@ -9,6 +9,8 @@ let batWobbleSpeed=11;
 let batWobbleSize=14;
 let batTurnChance=0.9;
 
+let hitPadding=20;
+
 let score=0;
 let round=0;
 
@@ -41,6 +43,7 @@ function addBats(){
     round+=1;
     batCount=Math.floor(Math.random()*2)+1;
     let speed=batVelocityX*(1+Math.min(round,8)*0.09);
+    showRound();
     for(let i=0;i<batCount;i++){
         let batChoose=batImages[Math.floor(Math.random()*2)];
         let batImg=document.createElement("img");
@@ -49,25 +52,6 @@ function addBats(){
         batImg.height=batHeight;
         batImg.draggable=false;
         batImg.style.position="absolute";
-        batImg.onclick=function(){
-            score+=1;
-            document.getElementById("score").innerHTML=score;
-            addPoints(bat);
-            this.classList.add("hit");
-            setTimeout(function(){
-                document.body.removeChild(batImg);
-            },500);
-            let remainingBats=[];
-            for(let i=0;i<bats.length;i++){
-                if(bats[i].image!==this){
-                    remainingBats.push(bats[i]);
-                }
-            }
-            bats=remainingBats;
-            if(bats.length==0){
-                addPumpkin(batCount);
-            }
-        }
         document.body.appendChild(batImg);
 
         let bat={
@@ -115,6 +99,52 @@ function moveBats(delta){
         bat.image.style.left=String(bat.x)+"px";
         bat.image.style.top=String(bat.y+Math.sin(bat.wobble)*batWobbleSize)+"px";
     }
+}
+
+function shootBat(bat){
+    score+=1;
+    let scoreText=document.getElementById("score");
+    scoreText.textContent=score;
+    scoreText.classList.remove("bump");
+    void scoreText.offsetWidth;
+    scoreText.classList.add("bump");
+    addPoints(bat);
+    bat.image.classList.add("hit");
+    setTimeout(function(){
+        bat.image.remove();
+    },500);
+    let remainingBats=[];
+    for(let i=0;i<bats.length;i++){
+        if(bats[i]!==bat){
+            remainingBats.push(bats[i]);
+        }
+    }
+    bats=remainingBats;
+    if(bats.length===0){
+        addPumpkin(batCount);
+    }
+}
+
+function shootPos(x,y){
+    for(let i=0;i<bats.length;i++){
+        let rect=bats[i].image.getBoundingClientRect();
+        if(x>=rect.left-hitPadding&&x<=rect.right+hitPadding&&y>=rect.top-hitPadding&&y<=rect.bottom+hitPadding){
+            shootBat(bats[i]);
+            return;
+        }
+    }
+}
+
+document.addEventListener("pointerdown", function(event){
+    shootPos(event.clientX,event.clientY);
+});
+
+function showRound(){
+    let roundText=document.getElementById("round");
+    roundText.textContent="Round "+round;
+    roundText.classList.remove("show");
+    void roundText.offsetWidth;
+    roundText.classList.add("show");
 }
 
 function addPoints(bat){
