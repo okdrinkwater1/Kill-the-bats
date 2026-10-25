@@ -164,7 +164,7 @@ img,.bat{
     cursor:pointer;
 }
 
-#start h1{
+#start h1,#gameOver h1{
     margin:0;
     font-size:100px;
     letter-spacing:4px;
@@ -176,7 +176,7 @@ img,.bat{
     animation:floatP 2.4s ease-in-out infinite alternate;
 }
 
-#start p{
+#start p,#gameOver p{
     margin:0;
     font-size:26px;
     color:#c9ff7a;
@@ -218,7 +218,7 @@ to{transform:translateY(-10px);}
 }
 
 @media (prefers-reduced-motion:reduce){
-    .stars,#start h1{animation:none;}
+    .stars,#start h1,#gameOver h1{animation:none;}
 }
 
 #vig{
@@ -252,4 +252,34 @@ to{transform:translateY(-10px);}
 
 #fill.low{
     background:linear-gradient(#ff9a7a,#e02a2a 55%,#921a1a);
+}
+
+#gameOver{
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    z-index:10;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap:14px;
+    text-align:center;
+    background:rgba(10,6,18,0.6);
+    font-family:augie;
+    color:#4be02a;
+    opacity:0;
+    pointer-events:none;
+    transition:opacity 0.5s;
+}
+
+#gameOver.show{
+    opacity:1;
+    pointer-events:auto;
+}
+
+#retry{
+    cursor:pointer;
 }

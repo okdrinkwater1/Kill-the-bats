@@ -14,6 +14,7 @@ let hitPadding=15;
 
 let score=0;
 let round=0;
+let gameOver=false;
 
 let baseTime=2;
 let startTimePerBat=3;
@@ -141,8 +142,40 @@ function updateTimer(delta){
     timerFill.style.transform="scaleX("+ratio+")";
     timerFill.classList.toggle("low",ratio<0.25);
     if(timeRem===0){
-        timerRunning=false;
+        End();
     }
+}
+
+function End(){
+    timerRunning=false;
+    gameOver=true;
+    let Bats=bats;
+    bats=[];
+    for(let i=0;i<Bats.length;i++){
+        Bats[i].image.classList.add("hit");
+    }
+    setTimeout(function(){
+        for(let i=0;i<Bats.length;i++){
+            Bats[i].image.remove();
+        }
+    },500)
+    document.getElementById("finalScore").textContent=score;
+    document.getElementById("gameOver").classList.add("show");
+}
+
+function restartGame(){
+    document.getElementById("retry").onclick=null;
+    closeVig(function(){
+        score=0;
+        round=0;
+        gameOver=false;
+        document.getElementById("score").textContent=score;
+        document.getElementById("gameOver").classList.remove("show");
+        timerFill.style.transform="scaleX(1)";
+        timerFill.classList.remove("low");
+        document.getElementById("retry").onclick=restartGame;
+        openVig(addBats);
+    })
 }
 
 function shootBat(bat){
@@ -341,6 +374,7 @@ window.onload=function(){
     setupVig();
     loadAssets();
     document.getElementById("start").onclick=startGame;
+    document.getElementById("retry").onclick=restartGame;
 }
 
 function startGame(){
