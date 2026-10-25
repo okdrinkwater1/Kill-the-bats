@@ -10,9 +10,10 @@ let batShakeSize=14;
 let batTurnChance=0.9;
 
 let maxBats=12;
-let hitPadding=15;
+let hitPadding=12;
 
 let score=0;
+let bestScore=0;
 let round=0;
 let gameOver=false;
 
@@ -47,6 +48,62 @@ function randomSign(){
     return Math.random() < 0.5 ? -1 : 1;
 }
 
+let audio_ctx=null;
+
+function audio(){
+    if(!audio_ctx){
+        audio_ctx=new AudioContext();
+    }
+    audio_ctx.resume();
+}
+document.addEventListener("pointerdown",audio);
+document.addEventListener("keydown",audio);
+
+const hz=(n)=>440*Math.pow(2,(n-69)/12);
+const music=(midi,delay,duration,type,volume,cutoff)=>{
+    if(!audio_ctx){
+        return;
+    }
+    const time=audio_ctx.currentTime+delay;
+    const oscillator=audio_ctx.createOscillator();
+    const gain=audio_ctx.createGain();
+    const filter=audio_ctx.createBiquadFilter();
+    oscillator.type=type;
+    oscillator.frequency.setValueAtTime(hz(midi),time);
+    filter.type="lowpass";
+    filter.frequency.value=cutoff;
+    gain.gain.setValueAtTime(volume,time);
+    gain.gain.exponentialRampToValueAtTime(0.001,time+duration);
+    oscillator.connect(filter);
+    filter.connect(gain);
+    gain.connect(audio_ctx.destination);
+    oscillator.start(time);
+    oscillator.stop(time+duration);
+}
+
+const A_minor=[69,71,72,74,76,77,79,81];
+const startSound=()=>{
+    for(let i=0;i<A_minor.length;i++){
+        let last=(i===A_minor.length-1);
+        music(A_minor[i],i*0.07,last?0.4:0.15,"triangle",0.15,6000);
+    }
+}
+
+const killSound=()=>{
+    music(84,0,0.07,"square",0.08,4000);
+}
+
+const gameOverSound=()=>{
+    for(let i=0;i<A_minor.length;i++){
+     let note=A_minor[A_minor.length-i-1]-12;
+     music(note,i*0.12,0.25,"square",0.12,900);
+    }
+    music(45,A_minor.length*0.12,0.8,"square",0.12,400); 
+}
+
+const restartSound=()=>{
+    music(69,0,0.12,"triangle",0.15,6000);
+}
 
 function gameLoop(time){
     let delta=(time-lastTime)/1000;
@@ -147,8 +204,13 @@ function updateTimer(delta){
 }
 
 function End(){
+    gameOverSound();
     timerRunning=false;
     gameOver=true;
+    if(score>bestScore){
+        bestScore=score;
+        localStorage.setItem("batBestScore",bestScore);
+    }
     let Bats=bats;
     bats=[];
     for(let i=0;i<Bats.length;i++){
@@ -159,11 +221,12 @@ function End(){
             Bats[i].image.remove();
         }
     },500)
-    document.getElementById("finalScore").textContent=score;
+    document.getElementById("bestScore").textContent=bestScore;
     document.getElementById("gameOver").classList.add("show");
 }
 
 function restartGame(){
+    restartSound();
     document.getElementById("retry").onclick=null;
     closeVig(function(){
         score=0;
@@ -179,6 +242,7 @@ function restartGame(){
 }
 
 function shootBat(bat){
+    killSound();
     score+=1;
     let scoreText=document.getElementById("score");
     scoreText.textContent=score;
@@ -371,6 +435,7 @@ function openVig(callback){
 
 window.onload=function(){
     timerFill=document.getElementById("fill");
+    bestScore=Number(localStorage.getItem("batBestScore"))||0;
     setupVig();
     loadAssets();
     document.getElementById("start").onclick=startGame;
@@ -378,6 +443,7 @@ window.onload=function(){
 }
 
 function startGame(){
+    startSound();
     document.getElementById("start").onclick=null;
     closeVig(function(){
         document.getElementById("start").remove();
