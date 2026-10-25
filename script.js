@@ -10,10 +10,20 @@ let batShakeSize=14;
 let batTurnChance=0.9;
 
 let maxBats=12;
-let hitPadding=20;
+let hitPadding=15;
 
 let score=0;
 let round=0;
+
+let baseTime=2;
+let startTimePerBat=3;
+let minTimePerBat=1.6;
+let timePerBatKill=0.1;
+let roundTime=0;
+let timeRem=0;
+let timerRunning=false;
+let timerFill=null;
+
 
 let lastTime=0;
 let assets=["assets/bat-left.gif","assets/bat-right.gif","assets/pumpkin1.png","assets/pumpkin2.png","assets/bg.png","assets/stars.png","assets/moon.png","assets/target.png"];
@@ -47,6 +57,7 @@ function gameLoop(time){
         delta=0;
     }
     moveBats(delta);
+    updateTimer(delta);
     requestAnimationFrame(gameLoop);
 }
 
@@ -54,7 +65,11 @@ function addBats(){
     bats=[];
     round+=1;
     batCount=Math.min(round,maxBats);
-    let speed=batVelocityX*(1+Math.min(round,8)*0.09);
+    let speed=batVelocityX*(1+Math.min(round,15)*0.08);
+    let timePerBat=Math.max(minTimePerBat,startTimePerBat-round*timePerBatKill);
+    roundTime=baseTime+batCount*timePerBat;
+    timeRem=roundTime;
+    timerRunning=true;
     showRound();
     for(let i=0;i<batCount;i++){
         let batChoose=batImages[Math.floor(Math.random()*2)];
@@ -114,6 +129,22 @@ function moveBats(delta){
     }
 }
 
+function updateTimer(delta){
+    if(!timerRunning){
+        return;
+    }
+    timeRem-=delta;
+    if(timeRem<=0){
+        timeRem=0;
+    }
+    let ratio=timeRem/roundTime;
+    timerFill.style.transform="scaleX("+ratio+")";
+    timerFill.classList.toggle("low",ratio<0.25);
+    if(timeRem===0){
+        timerRunning=false;
+    }
+}
+
 function shootBat(bat){
     score+=1;
     let scoreText=document.getElementById("score");
@@ -134,6 +165,7 @@ function shootBat(bat){
     }
     bats=remainingBats;
     if(bats.length===0){
+        timerRunning=false;
         addPumpkin(batCount);
     }
 }
@@ -305,6 +337,7 @@ function openVig(callback){
 }
 
 window.onload=function(){
+    timerFill=document.getElementById("fill");
     setupVig();
     loadAssets();
     document.getElementById("start").onclick=startGame;
