@@ -16,6 +16,7 @@ i wanted a simple looking game while it also taught me alot of things specially 
 - Game art is used from opengameart.org
 
 ## HOW TO PLAY
+- Open the demo link [click here](https://okdrinkwater1.github.io/Kill-the-bats/)
 - Click the screen to start the game.
 - Click on the bats to shoot them down, each bat is worth 1 point.
 - Kill every bat before the timer runs out
