@@ -1,6 +1,6 @@
 @font-face{
     font-family:augie;
-    src:url("font/augiepixel.ttf");
+    src:url("../font/augiepixel.ttf");
 }
 
 :root{
@@ -15,12 +15,12 @@ html,body{
 }
 
 body{
-    background:#000 url("assets/bg.png");
+    background:#000 url("../assets/bg.png");
     background-position:center;
     background-repeat:no-repeat;
     background-size:cover;
     background-attachment:fixed;
-    cursor:url("assets/target.png") 20 20,auto;
+    cursor:url("../assets/target.png") 20 20,auto;
     image-rendering:pixelated;
     user-select:none;
     -webkit-user-select:none;
@@ -39,7 +39,7 @@ img,.bat{
     margin:0;
     z-index:20;
     font:50px augie,monospace;
-    background:linear-gradient(#c9ff7a,var(--green)55%,#23921a);
+    background:linear-gradient(#c9ff7a,var(--green) 55%,#23921a);
     -webkit-background-clip:text;
     background-clip:text;
     color:transparent;
@@ -69,7 +69,7 @@ img,.bat{
     height:58vh;
     z-index:-1;
     pointer-events:none;
-    background:url("assets/stars.png");
+    background:url("../assets/stars.png");
     background-size:200px;
     image-rendering:pixelated;
     mask-image:linear-gradient(#000 70%,transparent);
@@ -103,7 +103,7 @@ img,.bat{
     transform:translate(-50%,-50%);
     width:min(28vw,280px);
     aspect-ratio:1;
-    background:url("assets/moon.png");
+    background:url("../assets/moon.png");
     background-repeat:no-repeat;
     background-size:contain;
     image-rendering:pixelated;
@@ -122,7 +122,7 @@ img,.bat{
     position:fixed;
     font-size:40px;
     font-family:augie;
-    background:linear-gradient(#c9ff7a,var(--green)55%,#23921a);
+    background:linear-gradient(#c9ff7a, 55%,#23921a);
     -webkit-background-clip:text;
     background-clip:text;
     color:transparent;
