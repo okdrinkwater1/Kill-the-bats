@@ -220,3 +220,12 @@ to{transform:translateY(-10px);}
 @media (prefers-reduced-motion:reduce){
     .stars,#start h1{animation:none;}
 }
+
+#vig{
+    position:fixed;
+    top:0;
+    left:0;
+    z-index:50;
+    pointer-events:none;
+    display:none;
+}
