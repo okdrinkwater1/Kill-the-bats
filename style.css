@@ -21,10 +21,14 @@ body{
     background-size:cover;
     background-attachment:fixed;
     image-rendering:pixelated;
+    user-select:none;
+    -webkit-user-select:none;
 }
 
 img,.bat{
     image-rendering:pixelated;
+    user-select:none;
+    -webkit-user-select:none;
 }
 
 #score{
@@ -36,6 +40,8 @@ img,.bat{
     font:50px augie,monospace;
     color:var(--green);
     text-shadow:3px 3px 0 var(--ink);
+    user-select:none;
+    -webkit-user-select:none;
 }
 
 .stars{
@@ -86,4 +92,75 @@ img,.bat{
     image-rendering:pixelated;
     pointer-events:none;
     filter:drop-shadow(0 0 10px rgba(201,211,220,0.18));
+}
+
+.hit{
+    pointer-events:none;
+    opacity:0;
+    transform:translateY(160px) rotate(200deg);
+    transition:transform 0.5s ease-in, opacity 0.5s;
+}
+
+.pop{
+    position:fixed;
+    font-size:34px;
+    font-family:augie;
+    color:#4be02a;
+    text-shadow:2px 2px 0 #0a0612;
+    pointer-events:none;
+    animation:rise 0.8s ease-out forwards;
+}
+
+@keyframes rise{
+    to{transform:translateY(-60px);opacity:0;}
+}
+
+.pumpkin{
+    transform:translateY(105%);
+    transition:transform 0.35s cubic-bezier(0.2,1.6,0.4,1);
+    pointer-events:none;
+}
+
+.pumpkin.up{
+    transform:none;
+}
+
+#start{
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    z-index:10;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap:14px;
+    text-align:center;
+    background:rgba(10,6,18,0.05);
+    font-family:augie;
+    color:#4be02a;
+    cursor:pointer;
+}
+
+#start img{
+    width:240px;
+    max-width:60vw;
+}
+
+#start h1{
+    margin:0;
+    font-size:100px;
+    text-shadow:4px 4px 0 #0a0612;
+}
+
+#start p{
+    margin:0;
+    font-size:26px;
+    text-shadow:2px 2px 0 #0a0612;
+}
+
+@media (prefers-reduced-motion:reduce){
+    .stars{animation:none;}
 }

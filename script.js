@@ -25,11 +25,6 @@ function randomSign(){
     return Math.random() < 0.5 ? -1 : 1;
 }
 
-window.onload=function(){
-    setTimeout(addBats,2000);
-    lastTime=performance.now();
-    requestAnimationFrame(gameLoop);
-}
 
 function gameLoop(time){
     let delta=(time-lastTime)/1000;
@@ -54,6 +49,25 @@ function addBats(){
         batImg.height=batHeight;
         batImg.draggable=false;
         batImg.style.position="absolute";
+        batImg.onclick=function(){
+            score+=1;
+            document.getElementById("score").innerHTML=score;
+            addPoints(bat);
+            this.classList.add("hit");
+            setTimeout(function(){
+                document.body.removeChild(batImg);
+            },500);
+            let remainingBats=[];
+            for(let i=0;i<bats.length;i++){
+                if(bats[i].image!==this){
+                    remainingBats.push(bats[i]);
+                }
+            }
+            bats=remainingBats;
+            if(bats.length==0){
+                addPumpkin(batCount);
+            }
+        }
         document.body.appendChild(batImg);
 
         let bat={
@@ -100,5 +114,70 @@ function moveBats(delta){
         }
         bat.image.style.left=String(bat.x)+"px";
         bat.image.style.top=String(bat.y+Math.sin(bat.wobble)*batWobbleSize)+"px";
+    }
+}
+
+function addPoints(bat){
+    let pop=document.createElement("div");
+    pop.className="pop";
+    pop.innerHTML="+1";
+    pop.style.left=String(bat.x+batWidth/2-20)+"px";
+    pop.style.top=String(bat.y)+"px";
+    document.body.appendChild(pop);
+
+    setTimeout(function(){
+        document.body.removeChild(pop);
+    },800);
+}
+
+function addPumpkin(batCount){
+    let pumpkinImage=document.createElement("img");
+    if(batCount==1){
+        pumpkinImage.src="assets/pumpkin1.png"
+    }
+    else{
+        pumpkinImage.src="assets/pumpkin2.png"
+    }
+    pumpkinImage.className="pumpkin";
+    pumpkinImage.width=192;
+    pumpkinImage.height=168;
+    pumpkinImage.draggable=false;
+
+    pumpkinImage.style.position="fixed";
+    pumpkinImage.style.bottom="0px";
+    pumpkinImage.style.left="50%";
+    pumpkinImage.style.marginLeft="-96px";
+    document.body.appendChild(pumpkinImage);
+
+    setTimeout(function(){
+        pumpkinImage.classList.add("up");
+    },500);
+    setTimeout(function(){
+        pumpkinImage.classList.remove("up");
+    },2600);
+    setTimeout(function(){
+        document.body.removeChild(pumpkinImage);
+        addBats();
+    },3200);
+}
+
+window.onload=function(){
+    document.getElementById("start").onclick=startGame;
+}
+
+function startGame(){
+    document.getElementById("start").remove();
+    setTimeout(addBats,2000);
+    lastTime=performance.now();
+    requestAnimationFrame(gameLoop);
+}
+
+window.onresize=function(){
+    gameWidth=window.innerWidth;
+    gameHeight=window.innerHeight*3/4;
+
+    for(let i=0;i<bats.length;i++){
+        bats[i].x=Math.max(0,Math.min(bats[i].x,gameWidth-batWidth));
+        bats[i].y=Math.max(0,Math.min(bats[i].y,gameHeight-batHeight));
     }
 }
